@@ -1,0 +1,36 @@
+/**
+ * Group: Davis Doan(cssc1090) & Jon Verne(cssc1145)
+ * CS 570 Operating Systems Summer 2017
+ * Assignment 2: Page Replacement Algorithms
+ * Filename: main.c
+ */
+
+#include "header.h"
+
+void read_pages()
+{
+  FILE* fp = fopen("pages.txt"i, "r");
+  // check if file exists
+  if(fp == null) {
+	 fputs("File error", stderr) ;
+  	 exit(1);
+  }
+
+}
+
+
+int main(){
+   // check if pages.txt has more than 99 numbers in the sequence
+   
+   //prompt user for the number of frames in main memory
+   int numberFrames;
+
+   printf("Assignment #2\n Enter number of frames in Main Memory: ");
+   scanf("%d", &numberFrames);
+   //printf("Number of frames is: %d \n", numberFrames); 
+
+   //read the sequence of pages from pages.txt then store the contents 
+    read_pages();
+
+    return 0;
+}
