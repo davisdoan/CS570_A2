@@ -142,8 +142,51 @@ void second_chance(char pages[], int numFrames) {
 	printf("Second Chance faults: %d\n", pageFaults);
 }
 
-void least_recently_used(){
+void clock(char pages[], int numFrames){
+	int maxFrame = numFrames - 1;   //zero based so, frame[0]->frame[numFrames]
+        int frames[100];
+        int referenceBits[100];
+        int pageFaults = 0;
+        int loaded = 0;                 //set to one when page successfully loaded into frames.
+        int currentPageInFrames = 0;    //set to one if page to be loaded is currently in frames array.         
+        int pagesPntr = 0;
+        int framesPntr = 0;
+	int clockHand = 0;	
 
+	//set the values for the frames and their reference bits
+        int z = 0;
+        for(z = 0; z <= maxFrame; z++){
+                frames[z] = -1;                                 //-1 means they are empty
+                referenceBits[z] = 0;                   //reference bits start at 0     
+        }
+	
+	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array, starting at the second page.
+		loaded = 0;
+                currentPageInFrames = 0;
+		for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
+			
+			if(pages[pagesPntr] == frames[framesPntr]){
+                                printf("%c is in frames\n", value);
+                                currentPageInFrames = 1;
+                                referenceBits[framesPntr] = 1;
+                                loaded = 1;
+                                break;
+                        }
+		}
+	
+		// if Page Number is in a frame, move on to the next number
+                if(currentPageInFrames == 1){
+                        //pagesPntr++;
+                        continue;
+                }
+		
+		while(currentPageInFrames = 0 && loaded = 0){
+			for(clockHand = 0; clockHand <= maxFrame; clockHand++){
+				if (referenceBits[clockHand] == 0){
+				
+				}
+			}
+	}
 }
 
 int main(){
