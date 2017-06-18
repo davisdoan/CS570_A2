@@ -160,7 +160,7 @@ void clock(char pages[], int numFrames){
                 referenceBits[z] = 0;                   //reference bits start at 0     
         }
 	
-	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array, starting at the second page.
+	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array.
 		loaded = 0;
                 currentPageInFrames = 0;
 		int value = pages[pagesPntr];
@@ -197,6 +197,29 @@ void clock(char pages[], int numFrames){
 		}
 	}
 	printf("Page Faults in Clock: %d",pageFaults);
+}
+
+void optimal(char pages[], int numFrames){
+	int maxFrame = numFrames - 1;   //zero based so, frame[0]->frame[numFrames]
+        int frames[100];
+        int refFrames[100];
+        int pageFaults = 0;
+        int loaded = 0;                 //set to one when page successfully loaded into frames.
+        int currentPageInFrames = 0;    //set to one if page to be loaded is currently in frames array.         
+        int pagesPntr = 0;
+        int framesPntr = 0;
+
+	//set the values for the frames and their reference frames.
+        int z = 0;
+        for(z = 0; z <= maxFrame; z++){
+                frames[z] = -1;                                 //-1 means they are empty
+                refFrames[z] = 0;                   //reference frames start at 0     
+        }
+	
+	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array.
+		
+	}
+		
 }
 
 int main(){
