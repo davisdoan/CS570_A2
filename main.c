@@ -196,7 +196,7 @@ void clock(char pages[], int numFrames){
 			pageFaults++;
 		}
 	}
-	printf("Page Faults in Clock: %d",pageFaults);
+	printf("Page Faults in Clock: %d\n",pageFaults);
 }
 
 void optimal(char pages[], int numFrames){
@@ -217,16 +217,32 @@ void optimal(char pages[], int numFrames){
         }
 	
 	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array.
-		
+		loaded = 0;
+                currentPageInFrames = 0;
+		int cnt;
+                int value = pages[pagesPntr];
+		for(z=0; z >= maxFrame; z++){
+			if(pagesPntr >= (num_characters - maxFrame)){
+				for(cnt = 0;cnt < (num_characters-pagesPntr-2);cnt++){
+					refFrames[cnt] = pages[pagesPntr + 1 + cnt]; 
+				}
+			}
+			refFrames[z] = pages[pagesPntr + (z+1)];
+		}
+                for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
+
+		}
 	}
-		
+	for(){}	
 }
+
 
 int main(){
    get_number_frames();
    read_pages();
    second_chance(sequenceArray, numberFrames); 
    clock(sequenceArray, numberFrames);
+   optimal(sequenceArray,numberFrames);		
    //call Seconc Chance Algorithm
    //Call Clock Algorithm
 
