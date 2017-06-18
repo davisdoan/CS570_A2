@@ -193,9 +193,10 @@ void clock(char pages[], int numFrames){
 			loaded = 1;
 			clockHand++;
 			if(clockHand > maxFrame){clockHand = 0;}
+			pageFaults++;
 		}
 	}
-	printf();
+	printf("Page Faults in Clock: %d",pageFaults);
 }
 
 int main(){
