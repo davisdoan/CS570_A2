@@ -221,19 +221,25 @@ void optimal(char pages[], int numFrames){
                 currentPageInFrames = 0;
 		int cnt;
                 int value = pages[pagesPntr];
-		for(z=0; z >= maxFrame; z++){
-			if(pagesPntr >= (num_characters - maxFrame)){
-				for(cnt = 0;cnt < (num_characters-pagesPntr-2);cnt++){
-					refFrames[cnt] = pages[pagesPntr + 1 + cnt]; 
-				}
+                        
+                // if we are towards the end of the sequence, and our number of frames is > sequence numbers remaning
+                if(pagesPntr >= (num_characters - maxFrame)){
+			for(cnt = 0;cnt < (num_characters-pagesPntr-2);cnt++){
+				refFrames[cnt] = pages[pagesPntr + 1 + cnt]; 
 			}
-			refFrames[z] = pages[pagesPntr + (z+1)];
-		}
+		} else {
+                // we are not near the end of the sequence, so load in the sequence numbers to the reference frames
+                    int p;  
+                    for( p = 0; p < maxFrame; p++) {
+                         // load the next future frames into the reference array
+                         refFrames[p] = pages[pagesPntr + 1 + p];
+                    }
+                }
                 for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
-
-		}
+		     char myFrame = refFrames[framesPntr];
+                     printf("Your frame contents are : %c\n", myFrame);
+                }
 	}
-	for(){}	
 }
 
 
