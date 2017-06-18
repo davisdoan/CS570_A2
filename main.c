@@ -236,23 +236,25 @@ void optimal(char pages[], int numFrames){
                     }
                 }
                 for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
-                	int i;
 			
 			if(pages[pagesPntr] == frames[framesPntr]){
                                 currentPageInFrames = 1;
                                 loaded = 1;
                                 break;
-                        }
-	
-			for(i = 0; i < maxFrame; i++){
-				if(frames[framesPntr] == refFrames[i]){
-					break;
-				}
-			}
-			frames[framesPntr] = pages[pagesPntr];
-			pageFaults++;
-			break;	
+                        }		
 		}
+		// if Page Number is in a frame, move on to the next number
+                if(currentPageInFrames == 1){
+                        continue;
+                }
+		
+		while(currentPageInFrames == 0 && loaded == 0){
+			//next handle the swap case.
+			for(framesPntr = 0; framesPntr <= mexFrame; framesPntr++){
+				
+			}	
+		}
+		
 	}
 	printf("Optimal algorith faults: %d\n", pageFaults);
 }
