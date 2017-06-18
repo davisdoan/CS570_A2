@@ -163,6 +163,7 @@ void clock(char pages[], int numFrames){
 	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array, starting at the second page.
 		loaded = 0;
                 currentPageInFrames = 0;
+		int value = pages[pagesPntr];
 		for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
 			
 			if(pages[pagesPntr] == frames[framesPntr]){
@@ -180,12 +181,19 @@ void clock(char pages[], int numFrames){
                         continue;
                 }
 		
-		while(currentPageInFrames = 0 && loaded = 0){
-			for(clockHand = 0; clockHand <= maxFrame; clockHand++){
-				if (referenceBits[clockHand] == 0){
-				
-				}
+		while(currentPageInFrames == 0 && loaded == 0){
+			while (referenceBits[clockHand] == 1){
+				referenceBits[clockHand] = 0;
+				clockHand++;
+				if(clockHand > maxFrame){clockHand = 0;}
+
 			}
+			frames[clockHand] = pages[pagesPntr];
+			referenceBits[clockHand] = 1;
+			loaded = 1;
+			clockHand++;
+			if(clockHand > maxFrame){clockHand = 0;}
+		}
 	}
 }
 
@@ -193,7 +201,7 @@ int main(){
    get_number_frames();
    read_pages();
    second_chance(sequenceArray, numberFrames); 
-   //call OPT algorithm
+   clock(sequenceArray, numberFrames);
    //call Seconc Chance Algorithm
    //Call Clock Algorithm
 
