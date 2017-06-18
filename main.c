@@ -195,6 +195,7 @@ void clock(char pages[], int numFrames){
 			if(clockHand > maxFrame){clockHand = 0;}
 		}
 	}
+	printf();
 }
 
 int main(){
