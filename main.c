@@ -237,14 +237,24 @@ void optimal(char pages[], int numFrames){
                 }
                 for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
                 	int i;
-			if(i = -1){break;}
+			
+			if(pages[pagesPntr] == frames[framesPntr]){
+                                currentPageInFrames = 1;
+                                loaded = 1;
+                                break;
+                        }
+	
 			for(i = 0; i < maxFrame; i++){
 				if(frames[framesPntr] == refFrames[i]){
-					i = -1;
+					break;
 				}
-			}	
+			}
+			frames[framesPntr] = pages[pagesPntr];
+			pageFaults++;
+			break;	
 		}
 	}
+	printf("Optimal algorith faults: %d\n", pageFaults);
 }
 
 
