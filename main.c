@@ -13,18 +13,14 @@ int num_characters = -1;
 
 void read_pages()
 {
-    // sequenceArray[] is the global array
-
-    // open the file
-    // read in the file
-    // store the sequence string, numbers with no spaces into an array [0] = first
     int arraysize = 1000;
     char current_char;
-    //int num_characters = 0;
     int i = 0;
-
+    int checkSize = sizeof(sequenceArray);
+    // ********************************************************************************************
+    // Open the pages.txt file, read the file and store the sequence into an array
+    // ********************************************************************************************
     ifstream myfile ("pages.txt");
-
        if (myfile.is_open())
           {
             while ( !myfile.eof())
@@ -33,16 +29,11 @@ void read_pages()
                   i++;
                   num_characters++;
             }      
-
       for (int i = 0; i <= num_characters; i++)
         {
            cout << sequenceArray[i];
         } 
-       // system("pause");
      } 
-//   printf( "Your contents are :  %s\n " , sequenceArray);
-   int checkSize = sizeof(sequenceArray);
-   printf(" Your sequence array size is : %d\n", checkSize);
    // check if pages.txt has more than 99 numbers in the sequence
    if(num_characters > 99) {
       printf("The limit of number of pages any process/thread may have is 99, please change your pages.txt file to follow that limit\n");
@@ -56,17 +47,15 @@ void get_number_frames()
 {
    printf("Assignment #2\n Enter number of frames in Main Memory: ");
    scanf("%d", &numberFrames);
-   //printf("Number of frames is: %d \n", numberFrames); 
 }
-	
 
 void second_chance(char pages[], int numFrames) {
-  	int maxFrame = numFrames - 1;	//zero based so, frame[0]->frame[numFrames]
-	int frames[100];
-	int referenceBits[100];
+  	int maxFrame = numFrames - 1;	// zero based so, frame[0]->frame[numFrames]
+	int frames[100];                // this array holds the pages in the frames
+	int referenceBits[100];         
 	int pageFaults = 0;
- 	int loaded = 0;			//set to one when page successfully loaded into frames.
-	int currentPageInFrames = 0;	//set to one if page to be loaded is currently in frames array.		
+ 	int loaded = 0;			// set to one when page successfully loaded into frames.
+	int currentPageInFrames = 0;	// set to one if page to be loaded is currently in frames array.		
 	int pagesPntr = 0;
 	int framesPntr = 0;
  
@@ -76,31 +65,26 @@ void second_chance(char pages[], int numFrames) {
 		frames[z] = -1;					//-1 means they are empty
 		referenceBits[z] = 0;			//reference bits start at 0	
 	} 
-  
-	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array, starting at the second page.
-            		loaded = 0;
-			currentPageInFrames = 0;
-	
-			printf("num_char: %d\n",num_characters);
-			char value = pages[pagesPntr];	
-			printf("checking if page %c is in current frame\n", value);
-		for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
-
-			
-                	if(pages[pagesPntr] == frames[framesPntr]){
-				printf("%c is in frames\n", value);
-				currentPageInFrames = 1;
-				referenceBits[framesPntr] = 1;
-				loaded = 1;
-				break;
-			}
+        // traverse the pages array, starting at the second page 
+	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) {
+            loaded = 0;
+	    currentPageInFrames = 0;
+	    char value = pages[pagesPntr];	
+            
+            // traverse the frames array to check if the current page is already loaded into the frames array
+	    for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) {
+                if(pages[pagesPntr] == frames[framesPntr]){
+		    currentPageInFrames = 1;
+		    referenceBits[framesPntr] = 1;
+		    loaded = 1;
+		    break;
 		}
+	    }
 
-		// if Page Number is in a frame, move on to the next number
-		if(currentPageInFrames == 1){
-			//pagesPntr++;
-			continue;
-		}
+	    // if Page Number is in a frame, move on to the next number
+	    if(currentPageInFrames == 1){
+  	        continue;
+	    }
 		
 	
 		/*
@@ -159,13 +143,15 @@ void clock(char pages[], int numFrames){
                 frames[z] = -1;                                 //-1 means they are empty
                 referenceBits[z] = 0;                   //reference bits start at 0     
         }
-	
-	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array.
+
+        // traverse through the pages array	
+	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) {
 		loaded = 0;
                 currentPageInFrames = 0;
 		int value = pages[pagesPntr];
-		for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
-			
+                
+                // traverse the frames array to check if current page is already loaded
+		for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) {
 			if(pages[pagesPntr] == frames[framesPntr]){
                                 printf("%c is in frames\n", value);
                                 currentPageInFrames = 1;
@@ -181,19 +167,26 @@ void clock(char pages[], int numFrames){
                         continue;
                 }
 		
-		while(currentPageInFrames == 0 && loaded == 0){
-			while (referenceBits[clockHand] == 1){
-				referenceBits[clockHand] = 0;
-				clockHand++;
-				if(clockHand > maxFrame){clockHand = 0;}
-
-			}
-			frames[clockHand] = pages[pagesPntr];
-			referenceBits[clockHand] = 1;
-			loaded = 1;
+		while(currentPageInFrames == 0 && loaded == 0) {
+                    // check the reference bit, if its 1, set it to 0
+                    // move the clockhand to the next frame
+		    while (referenceBits[clockHand] == 1) {
+	                referenceBits[clockHand] = 0;
 			clockHand++;
-			if(clockHand > maxFrame){clockHand = 0;}
-			pageFaults++;
+			if(clockHand > maxFrame){
+                            clockHand = 0;
+                        }
+		    }
+                    // do the swap and set the bit to one of the new element
+		    frames[clockHand] = pages[pagesPntr];
+		    referenceBits[clockHand] = 1;
+		    loaded = 1;
+		    clockHand++;
+		   
+                    if(clockHand > maxFrame){
+                        clockHand = 0; 
+                    }
+		    pageFaults++;
 		}
 	}
 	printf("Page Faults in Clock: %d\n",pageFaults);
@@ -319,20 +312,15 @@ void optimal(char pages[], int numFrames){
                                   }
 			}	
 		}
-		
 	}
-	printf("Optimal algorith faults: %d\n", pageFaults);
+	printf("The number of faults in the Optimal algorithm : %d\n", pageFaults);
 }
-
 
 int main(){
    get_number_frames();
    read_pages();
-   //second_chance(sequenceArray, numberFrames); 
+   second_chance(sequenceArray, numberFrames); 
    //clock(sequenceArray, numberFrames);
-   optimal(sequenceArray,numberFrames);		
-   //call Seconc Chance Algorithm
-   //Call Clock Algorithm
-   // comment
+   //optimal(sequenceArray,numberFrames);		
    return 0;
 }
