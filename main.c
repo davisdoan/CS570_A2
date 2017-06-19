@@ -215,43 +215,108 @@ void optimal(char pages[], int numFrames){
                 frames[z] = -1;                                 //-1 means they are empty
                 refFrames[z] = 0;                   //reference frames start at 0     
         }
-	
+        printf("About to traverse the Page Sequence inside of Optimal\n");	
 	for(pagesPntr = 0; pagesPntr < num_characters; pagesPntr++) { //traverse pages array.
 		loaded = 0;
                 currentPageInFrames = 0;
 		int cnt;
                 int value = pages[pagesPntr];
-                        
+                printf("=====Your Current Page from the Sequence is %c=====\n", value );  
+                printf("You are current on the index %d for pages\n",pagesPntr); 
+
+                // **************************************************************************************************
+                // Load in the Sequences in the future into the Reference Frames        
                 // if we are towards the end of the sequence, and our number of frames is > sequence numbers remaning
+                // **************************************************************************************************
                 if(pagesPntr >= (num_characters - maxFrame)){
 			for(cnt = 0;cnt < (num_characters-pagesPntr-2);cnt++){
 				refFrames[cnt] = pages[pagesPntr + 1 + cnt]; 
 			}
 		} else {
                 // we are not near the end of the sequence, so load in the sequence numbers to the reference frames
-                    int p;  
-                    for( p = 0; p < maxFrame; p++) {
+                    int p; 
+                    char loadThisPage;
+                    for( p = 0; p <= maxFrame; p++) {
                          // load the next future frames into the reference array
-                         refFrames[p] = pages[pagesPntr + 1 + p];
+                             loadThisPage = pages[pagesPntr + 1+ p];
+                             printf("loading in new pages %c into the Futures Ref because there are empty spots\n", loadThisPage);
+                             refFrames[p] = pages[pagesPntr + 1+ p];
                     }
                 }
-                for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { //traverse frames array checking for the current page alreadey loaded in frames array.
-			
+                
+                // **************************************************************************************************
+                // Traverse the current frames array to check to see if the current page number is already in the current frames array
+                // **************************************************************************************************
+                for(framesPntr = 0 ; framesPntr <= maxFrame ; framesPntr++) { 
+	                // checking to see if the current page is in the current frames list
+	                // if it is, set values of boolean flags so that you move onto the next page in the sequence	
 			if(pages[pagesPntr] == frames[framesPntr]){
+                                printf("Your page is currently in the current frames list, no need to load it\n");
                                 currentPageInFrames = 1;
                                 loaded = 1;
                                 break;
                         }		
 		}
-		// if Page Number is in a frame, move on to the next number
+		// if Page Number is in a frame, move on to the page number in the overall sequence
                 if(currentPageInFrames == 1){
+                        printf("=== $$$$$ Inside your flag check right before the CONTINUE, moving on to the next page $$$$\n");
                         continue;
                 }
+	
+                // **************************************************************************************************
+                // this page number is NOT in the current frames, so check against the future reference frames
+                // to see which is the best number to swap out	
+                // **************************************************************************************************
 		
-		while(currentPageInFrames == 0 && loaded == 0){
+                // if we are on the last page of the sequence, just load it in and don't do any checks
+                if(pagesPntr == (num_characters - 1)) {
+                   frames[0] = pages[pagesPntr];
+                   loaded = 1;
+                   pageFaults++;
+                   printf("We are in the LAST page of the sequence and we just loaded in!\n");
+                   break;
+                } 
+                int futurePtr;
+                int refMatchFlag;
+                printf("about to enter the while loop to check future frames against current frames\n");
+                while(currentPageInFrames == 0 && loaded == 0){
 			//next handle the swap case.
-			for(framesPntr = 0; framesPntr <= mexFrame; framesPntr++){
-				
+			//Walk through the current pages inside the frames list
+			for(framesPntr = 0; framesPntr <= maxFrame; framesPntr++){
+				printf("@@@@@@@@@@@@@ walking through the current pages inside your frame list @@@ \n");
+                                // walk through the pages inside the future refernece list
+				for(futurePtr = 0; futurePtr <= maxFrame; futurePtr++){
+                                    // compare the current page number from the current frame list 
+                                    // against the current page number from the future frame list
+                                    // if the current frame is equal to one of the elements inside the future list
+                                    // continue onto the NEXT frame
+                                   printf("About to check if future frame number is equal to frames list-------------------\n");
+                                   char futureVal, currentVal;
+                                   futureVal = refFrames[futurePtr];
+                                   currentVal = frames[framesPntr];
+                                   printf("~~~~~~~~~~Your future value is : %c\n", futureVal);
+                                   printf("~~~~~~~~~~Your current val is : %c\n", currentVal);
+                                
+                                  if(refFrames[futurePtr] == frames[framesPntr]) {
+                                     refMatchFlag = 1;
+                                     printf("Current frame MATCHES a frame from the FUTURE ########\n");
+                                     printf("THE PAGE YOU ARE ON IS %d =========\n", pagesPntr);
+                                     break;
+                                   } else{
+                                    printf("There is NO match, setting your flag to ZERO &&&&&&&&&&&&\n"); 
+                                    // if it goes through the entire future list and there are NO matches 
+                                    // then mark the current frames pointer to be swapped out 
+                                     refMatchFlag = 0; 
+                                    }
+                                } 
+                                // The current page is not coming up soon in the future so swap it out
+                                 if( refMatchFlag == 0) {
+                                     frames[framesPntr] = pages[pagesPntr]; // swap the current frame with the current page number
+                                     pageFaults++;
+                                     printf("******** You have a fault in OPTIMAL ******\n");
+				     loaded = 1;
+                                     break;
+                                  }
 			}	
 		}
 		
@@ -263,8 +328,8 @@ void optimal(char pages[], int numFrames){
 int main(){
    get_number_frames();
    read_pages();
-   second_chance(sequenceArray, numberFrames); 
-   clock(sequenceArray, numberFrames);
+   //second_chance(sequenceArray, numberFrames); 
+   //clock(sequenceArray, numberFrames);
    optimal(sequenceArray,numberFrames);		
    //call Seconc Chance Algorithm
    //Call Clock Algorithm
