@@ -176,7 +176,7 @@ void clock(char pages[], int numFrames){
 		    pageFaults++;
 		}
 	}
-	printf(" The number of page Faults in the Clock algorithm is: %d\n",pageFaults);
+	printf("The number of page faults in the Clock algorithm is: %d\n",pageFaults);
 }
 
 void optimal(char pages[], int numFrames){
@@ -283,7 +283,7 @@ void optimal(char pages[], int numFrames){
 			}	
 		}
 	}
-	printf("The number of faults in the Optimal algorithm is : %d\n", pageFaults);
+	printf("The number of page faults in the Optimal algorithm is : %d\n", pageFaults);
 }
 
 int main(){
@@ -291,6 +291,7 @@ int main(){
    read_pages();
    second_chance(sequenceArray, numberFrames); 
    clock(sequenceArray, numberFrames);
-   optimal(sequenceArray,numberFrames);		
+   optimal(sequenceArray,numberFrames);
+   printf("That is the end of the Page Replacement program, have a nice day!\n");		
    return 0;
 }

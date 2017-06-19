@@ -1,25 +1,56 @@
-Group: Davis Doan(cssc1090) & Jon Verne(cssc1145)
-CS570 Operating Systems Summer 2017
-Assignment #1: Process Manager 
+Group: Jon Verne (cssc1145) & Davis Doan (cssc1090)
+CS570 Operatint Systems Summer 2017
+Assignment #2: Page Replacement Algorithms
 Filename: README
-Account Available for Testing: cssc1090
+Account Available for testing: cssc1090 
+ 
+===== Assignment 2 Analysis =====
+ 
+For this Assignment we had to study three page replacement algorithms which where: Clock, OPT(Optimal Page Replacement), and Second Chance. After we implemented these algorithms, we made several tests with different page sequences and frames. The remaining of this report will take into account the various tests and what the results were. 
 
-This assignment contains the following files, README.txt file, a header file called header.h and my main program called main.c. Our main program is the parent process for the threads that will be running, handling the creation and joining of the threads. Makefile includes a script to allow you to call it to compile and run the program greatly reducing repetitive command line arguments. QUOTE.txt will contain all of the printed output done by the threads.
+The Clock algorithm works by keeping track of how old each page in the frame through use of a pointer. It looks for the one that has been in the stack the longest and has not been referenced recently. To accomplish this we need to add one bit to tell if they have been recently referenced. When the page is first loaded in to memory their used bit is set to one. When the page is referenced, the used bit is set to one. When the memory is full and theres a new entry, it replaces the first page in the stack, and referenced by the pointer, whose used bit is zero. Also, during the search for replacement algorithm, each entry whose used bit is set to one changes their bit to zero as the pointer increments past that position. 
 
-header.h -- header
-main.c --- main program
-makefile -- makefile
-QUOTE.txt -- output file.
+For the first test we did the Clock Page Replacement algorithm. In the first test case, we used three frames. For this test, the Clock page algorithm returned the most page faults, it took a total of 8 page faults.  For the implementation of this algorithm we used most of the code we had previously written for the second chance algorithm. Using a reference bit array to store the reference bit associated to each individual frame we traversed the list of pages performing the following procedure. First we check if the current page being looked at is already in the frames list, if it is, we set its referenced bit to one and we move on to the next page. If it is not in the frames we perform the clock page replacement algorithm which replaces the first frame with a reference bit of zero and increments the fault counter. 
 
-To Run this program call 
-make 
+For the second test case we used a frame size of four which produced no significant differences from the previous test of three frames.
 
-./bots to launch assignment 1. 
+The second chance algorithm was similar to the clock, but with some minor changes. For one, we kept track of the age of the page by having it first loaded to the top of the frame. This differed from the clocks method of keeping a running pointer. This added a new level of complexity as we had a much more dynamic frames list. Like the clock, second chance used a reference bit array, but where the clock reset the bit to zero as it passed, second chance would check if its last value in the frame had a reference bit of one, if it did it would get a “second chance” and be moved to the top of the fames list, if the bit was zero it would be deleted. The algorithm would move the list down one space to fill the gap, and load the new page into the first spot.
+
+For our analysis of second chance we used a frame size of three against a list of twelve pages. When compared against the other algorithms, using the same parameters, second chance was tied with the optimal algorithm at six page faults. However as we increased the size of both the frame size and the pages, second chance began to fall behind the other two in all areas except runtime, returning a greater number of page faults than the other two making it the least efficient page replacement algorithm in terms of memory usage.
+
+The last page replacement algorithm we analyzed was the OPT(Optimal) replacement algorithm. This algorithm would look ahead, by the number of frame it was allocated, and swap out the new page to be loaded with the page that is going to be looked at the furthest in the future. In a run time system it is impossible to know future events but it is important to analyze because it creates less faults than the previous algorithms with a small frame size. However, given a big enough frame size to work with makes the OPT algorithm level in terms of the number of faults as compared to the other algorithms. 
+
+For the last analysis of the OPT page replacement algorithm, there was several key differences as opposed with the other two Page replacement algorithms. When we assigned less frames for our tests, the OPT algorithms was always the clear winner with less page faults unless it is short list of pages. Lets take the first test case for example, we used a frame stack of 3 and with the first page sequence. The OPT returned a total of 6 page frames. For the second test case, using a different page sequence and with a frame stack of 3, OPT returned less page faults than the other two algorithms. A total of 10 page faults compared with 12 for Second Chance and Clock algorithms. When I increased the frame stack to 5, OPT still returned less page faults than the other two. It returned a total of 7, Second Chance returned 11 and Clock return a total of 9 page faults. 
+ 
+To conclude, the following tests for these three page replacement algorithms demonstrated key differences between all of them. When it came down to using smaller page frames, the OPT algorithm usually resulted with significantly less page faults than Clock or Second Chance. However, as we increased the frame stack size, they all became more prevalent in page faults. In the case of our page sequences and amount of frames, Second Chance and Clock algorithms usually were close to each other. According to our tests, both stayed pretty close in page defaults as we increased more the frame stack.  The OPT algorithm still showed a significant advantage, whereas the Second Chance and Clock algorithms only differed by one page fault. In the end we could not find a page sequence that showed a significant difference between the Second Chance and Clock algorithms. Below are a summary of our test cases and their results.
+
+===== Test Results =====
+ 
+=== First Test Scenario ===
+TEST#1: Pages:232152453252 
+Frames: 3 
+ClockPageFaults: 8 
+SecondChancePageFaults: 6
+OPTPageFaults: 6 
+
+TEST#2: Pages:232152453252 
+Frames:5 
+ClockPageFaults: 5 
+SecondChancePageFaults: 5 
+OPTPageFaults: 5 
+ 
 
 
-Lessons Learned:
-1. We learned how to create threads
-2. We learned how to work with semaphores
-3. We learned how to work with VIM
-4. We learned how to work with make files and header files
-5. We got practice with C++
+=== Second Test Scenario ===
+TEST#1: Pages:3230842509832 
+Frames: 3 
+ClockPageFaults: 12 
+SecondChancePageFaults: 12 
+OPTPageFaults: 10
+
+TEST#2: Pages:3230842509832 
+Frames:5 
+ClockPageFaults: 9 
+SecondChancePageFaults: 11
+OPTPageFaults: 8
+

@@ -1,7 +1,7 @@
 /**
  * Group: Davis Doan(cssc1090) & Jon Verne(cssc1145)
  * CS 570 Operating Systems Summer 2017
- * Assignment 1: Process Manager
+ * Assignment 2: Page Replacement Algorithm
  * Filename: header.h
  */
 
@@ -11,16 +11,12 @@
 #include <iostream>
 #include <fstream>
 #include <unistd.h>
-#include <semaphore.h>
-#include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
 
 using namespace std;
 
 #define N 7
-//extern char sequenceArray[10000];
-sem_t FLAG;
 
 void write_pid();
 void create_threads();
