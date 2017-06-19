@@ -268,6 +268,6 @@ int main(){
    optimal(sequenceArray,numberFrames);		
    //call Seconc Chance Algorithm
    //Call Clock Algorithm
-
+   // comment
    return 0;
 }
